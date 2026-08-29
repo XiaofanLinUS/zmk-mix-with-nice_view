@@ -7,15 +7,22 @@
  *   Lower ratio = slower, more precise movement
  */
 
-/* Scroll layers: which layers activate scroll mode */
-#define MIX_SCROLL_LAYERS 1 2
+/* Scroll layers: which layers activate scroll mode.
+ * Layer 4 does not exist in the keymap (only layers 0-3), so scroll never
+ * triggers — the trackpad moves the mouse on every layer. Kept as a
+ * placeholder so scroll can be re-enabled by pointing this at 0-3.
+ */
+#define MIX_SCROLL_LAYERS 4
 
 /* Cirque trackpad sensitivity: "1x" (default), "2x", "4x" */
 #define MIX_CIRQUE_SENSITIVITY "2x"
 
-/* Mouse pointer speed: 5/2 (@1x default), 5/2 (@2x fast), 3/1 (very fast) */
-#define MIX_MOUSE_SPEED_NUM 2
-#define MIX_MOUSE_SPEED_DEN 1
+/* Mouse pointer speed (zip_xy_scaler ratio):
+ *   5/2 = fast, 2/1 = medium, 3/2 = smooth (slightly slower), 1/1 = slow
+ *   Lower ratio = slower pointer and finer/smoother stepping.
+ */
+#define MIX_MOUSE_SPEED_NUM 3
+#define MIX_MOUSE_SPEED_DEN 2
 
 /* Scroll speed: 1/6 (default @1x), 1/30 (@2x slow), 1/20 (@2x medium) */
 #define MIX_SCROLL_SPEED_NUM 1
