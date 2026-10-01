@@ -21,8 +21,8 @@
  *   5/2 = fast, 2/1 = medium, 3/2 = smooth (slightly slower), 1/1 = slow
  *   Lower ratio = slower pointer and finer/smoother stepping.
  */
-#define MIX_MOUSE_SPEED_NUM 2
-#define MIX_MOUSE_SPEED_DEN 1
+#define MIX_MOUSE_SPEED_NUM 9
+#define MIX_MOUSE_SPEED_DEN 4
 
 /* Scroll speed: 1/6 (default @1x), 1/30 (@2x slow), 1/20 (@2x medium) */
 #define MIX_SCROLL_SPEED_NUM 1
