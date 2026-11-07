@@ -56,7 +56,7 @@ layers:
   - layer 1
   - SPACE
   - KP ENTER
-  - layer 1
+  - Ctl+Alt+SPACE
   - layer 2
   - RALT
   - {t: PSCRN, h: Buleth}
