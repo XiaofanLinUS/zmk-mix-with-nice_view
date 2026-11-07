@@ -167,6 +167,25 @@ static void draw_central_relay_battery(lv_obj_t *canvas, const struct status_sta
     }
 }
 
+/* --- TOP: caps lock indicator, below the battery row --- */
+
+/* HID LED report bit 1 = Caps Lock (bit 0 = Num Lock, bit 2 = Scroll Lock) */
+#define CSR_HID_CAPS_LOCK BIT(1)
+
+static void draw_caps_indicator(lv_obj_t *canvas, const struct status_state *state) {
+    /* Only show when we have valid relay data from the central half */
+    if (!state->central_relay_received || !state->caps_lock) {
+        return;
+    }
+
+    lv_draw_label_dsc_t label_dsc;
+    init_label_dsc(&label_dsc, LVGL_FOREGROUND, &pixel_operator_mono, LV_TEXT_ALIGN_CENTER);
+
+    /* y=32 keeps this line clear of both the battery row (y<=29) and the
+     * middle canvas, which overlaps the top canvas at y >= ~44. */
+    lv_canvas_draw_text(canvas, 0, 32, 68, &label_dsc, "CAPS");
+}
+
 /* --- BOTTOM: not-connected fallback label --- */
 
 static void draw_not_connected_label(lv_obj_t *canvas) {
@@ -201,6 +220,9 @@ static void draw_top(lv_obj_t *widget, lv_color_t cbuf[], const struct status_st
     /* Right column: central relay status */
     draw_central_relay_conn_icon(canvas, state);
     draw_central_relay_battery(canvas, state);
+
+    /* Caps lock state relayed from central */
+    draw_caps_indicator(canvas, state);
 
     rotate_canvas(canvas, cbuf);
 }
@@ -307,6 +329,7 @@ struct central_relay_state {
     bool connected;
     bool bonded;
     bool usb;
+    uint8_t hid_indicators;
     int profile_index;
     uint8_t layer_index;
     const char *layer_label;
@@ -320,6 +343,7 @@ static void set_central_relay_status(struct zmk_widget_screen *widget,
     widget->state.central_relay_connected = state.connected;
     widget->state.central_relay_bonded = state.bonded;
     widget->state.central_relay_usb = state.usb;
+    widget->state.caps_lock = (state.hid_indicators & CSR_HID_CAPS_LOCK) != 0;
 
     /* Standard names for draw_profile_status/draw_layer_status reuse */
     widget->state.active_profile_index = state.profile_index;
@@ -345,6 +369,7 @@ static struct central_relay_state central_relay_get_state(const zmk_event_t *_eh
         .connected = flags & CSR_FLAG_CONNECTED,
         .bonded = flags & CSR_FLAG_BONDED,
         .usb = flags & CSR_FLAG_USB,
+        .hid_indicators = csr_cache_get_hid_indicators(),
         .profile_index = csr_cache_get_active_profile(),
         .layer_index = csr_cache_get_active_layer(),
         .layer_label = csr_cache_get_layer_name(),

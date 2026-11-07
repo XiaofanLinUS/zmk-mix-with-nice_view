@@ -18,6 +18,7 @@
 struct status_state {
     uint8_t battery; /* 0 = no data yet, rendered as "--%" */
     bool charging;
+    bool caps_lock; /* HID caps lock indicator (relayed from central) */
 #if !IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
     struct zmk_endpoint_instance selected_endpoint;
     int active_profile_index;
